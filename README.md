@@ -151,15 +151,3 @@ npm run deploy
 or
 sh ./deploy.sh
 ```
-
-## Tutorials
- - [Create API Documentation Using Squarespace](https://selfaware.blog/home/2018/6/23/api-documentation)
-
-## Inspirations
-
- - [KunalKapadia/express-mongoose-es6-rest-api](https://github.com/KunalKapadia/express-mongoose-es6-rest-api)
- - [diegohaz/rest](https://github.com/diegohaz/rest)
-
-## License
-
-[MIT License](README.md) - [Daniel Sousa](https://github.com/danielfsousa)
