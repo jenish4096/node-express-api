@@ -1,8 +1,13 @@
 version: "3"
 services:
   boilerplate-api:
-    build: .
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: dev
     volumes:
-      - .:/app
+      - .:/app  
     ports:
-      - "3000:3000"
+      - "3000:3000"  
+    environment:
+      - NODE_ENV=development
