@@ -73,10 +73,10 @@ describe('Users API', async () => {
     userAccessToken = (await User.findAndGenerateToken(dbUsers.jonSnow)).accessToken;
   });
 
-  describe('POST /v1/users', () => {
+  describe('POST /users', () => {
     it('should create a new user when request is ok', () => {
       return request(app)
-        .post('/v1/users')
+        .post('/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(admin)
         .expect(httpStatus.CREATED)
@@ -88,7 +88,7 @@ describe('Users API', async () => {
 
     it('should create a new user and set default role to "user"', () => {
       return request(app)
-        .post('/v1/users')
+        .post('/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(user)
         .expect(httpStatus.CREATED)
@@ -101,7 +101,7 @@ describe('Users API', async () => {
       user.email = dbUsers.branStark.email;
 
       return request(app)
-        .post('/v1/users')
+        .post('/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(user)
         .expect(httpStatus.CONFLICT)
@@ -119,7 +119,7 @@ describe('Users API', async () => {
       delete user.email;
 
       return request(app)
-        .post('/v1/users')
+        .post('/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(user)
         .expect(httpStatus.BAD_REQUEST)
@@ -137,7 +137,7 @@ describe('Users API', async () => {
       user.password = '12345';
 
       return request(app)
-        .post('/v1/users')
+        .post('/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(user)
         .expect(httpStatus.BAD_REQUEST)
@@ -153,7 +153,7 @@ describe('Users API', async () => {
 
     it('should report error when logged user is not an admin', () => {
       return request(app)
-        .post('/v1/users')
+        .post('/users')
         .set('Authorization', `Bearer ${userAccessToken}`)
         .send(user)
         .expect(httpStatus.FORBIDDEN)
@@ -164,10 +164,10 @@ describe('Users API', async () => {
     });
   });
 
-  describe('GET /v1/users', () => {
+  describe('GET /users', () => {
     it('should get all users', () => {
       return request(app)
-        .get('/v1/users')
+        .get('/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(httpStatus.OK)
         .then(async (res) => {
@@ -190,7 +190,7 @@ describe('Users API', async () => {
 
     it('should get all users with pagination', () => {
       return request(app)
-        .get('/v1/users')
+        .get('/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ page: 2, perPage: 1 })
         .expect(httpStatus.OK)
@@ -210,7 +210,7 @@ describe('Users API', async () => {
 
     it('should filter users', () => {
       return request(app)
-        .get('/v1/users')
+        .get('/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ email: dbUsers.jonSnow.email })
         .expect(httpStatus.OK)
@@ -230,7 +230,7 @@ describe('Users API', async () => {
 
     it('should report error when pagination\'s parameters are not a number', () => {
       return request(app)
-        .get('/v1/users')
+        .get('/users')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .query({ page: '?', perPage: 'whaat' })
         .expect(httpStatus.BAD_REQUEST)
@@ -255,7 +255,7 @@ describe('Users API', async () => {
 
     it('should report error if logged user is not an admin', () => {
       return request(app)
-        .get('/v1/users')
+        .get('/users')
         .set('Authorization', `Bearer ${userAccessToken}`)
         .expect(httpStatus.FORBIDDEN)
         .then((res) => {
@@ -265,13 +265,13 @@ describe('Users API', async () => {
     });
   });
 
-  describe('GET /v1/users/:userId', () => {
+  describe('GET /users/:userId', () => {
     it('should get user', async () => {
       const id = (await User.findOne({}))._id;
       delete dbUsers.branStark.password;
 
       return request(app)
-        .get(`/v1/users/${id}`)
+        .get(`/users/${id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(httpStatus.OK)
         .then((res) => {
@@ -281,7 +281,7 @@ describe('Users API', async () => {
 
     it('should report error "User does not exist" when user does not exists', () => {
       return request(app)
-        .get('/v1/users/56c787ccc67fc16ccc1a5e92')
+        .get('/users/56c787ccc67fc16ccc1a5e92')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(httpStatus.NOT_FOUND)
         .then((res) => {
@@ -292,7 +292,7 @@ describe('Users API', async () => {
 
     it('should report error "User does not exist" when id is not a valid ObjectID', () => {
       return request(app)
-        .get('/v1/users/palmeiras1914')
+        .get('/users/palmeiras1914')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(httpStatus.NOT_FOUND)
         .then((res) => {
@@ -305,7 +305,7 @@ describe('Users API', async () => {
       const id = (await User.findOne({ email: dbUsers.branStark.email }))._id;
 
       return request(app)
-        .get(`/v1/users/${id}`)
+        .get(`/users/${id}`)
         .set('Authorization', `Bearer ${userAccessToken}`)
         .expect(httpStatus.FORBIDDEN)
         .then((res) => {
@@ -315,13 +315,13 @@ describe('Users API', async () => {
     });
   });
 
-  describe('PUT /v1/users/:userId', () => {
+  describe('PUT /users/:userId', () => {
     it('should replace user', async () => {
       delete dbUsers.branStark.password;
       const id = (await User.findOne(dbUsers.branStark))._id;
 
       return request(app)
-        .put(`/v1/users/${id}`)
+        .put(`/users/${id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(user)
         .expect(httpStatus.OK)
@@ -337,7 +337,7 @@ describe('Users API', async () => {
       delete user.email;
 
       return request(app)
-        .put(`/v1/users/${id}`)
+        .put(`/users/${id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(user)
         .expect(httpStatus.BAD_REQUEST)
@@ -356,7 +356,7 @@ describe('Users API', async () => {
       user.password = '12345';
 
       return request(app)
-        .put(`/v1/users/${id}`)
+        .put(`/users/${id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(user)
         .expect(httpStatus.BAD_REQUEST)
@@ -372,7 +372,7 @@ describe('Users API', async () => {
 
     it('should report error "User does not exist" when user does not exists', () => {
       return request(app)
-        .put('/v1/users/palmeiras1914')
+        .put('/users/palmeiras1914')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(httpStatus.NOT_FOUND)
         .then((res) => {
@@ -385,7 +385,7 @@ describe('Users API', async () => {
       const id = (await User.findOne({ email: dbUsers.branStark.email }))._id;
 
       return request(app)
-        .put(`/v1/users/${id}`)
+        .put(`/users/${id}`)
         .set('Authorization', `Bearer ${userAccessToken}`)
         .expect(httpStatus.FORBIDDEN)
         .then((res) => {
@@ -399,7 +399,7 @@ describe('Users API', async () => {
       const role = 'admin';
 
       return request(app)
-        .put(`/v1/users/${id}`)
+        .put(`/users/${id}`)
         .set('Authorization', `Bearer ${userAccessToken}`)
         .send(admin)
         .expect(httpStatus.OK)
@@ -409,14 +409,14 @@ describe('Users API', async () => {
     });
   });
 
-  describe('PATCH /v1/users/:userId', () => {
+  describe('PATCH /users/:userId', () => {
     it('should update user', async () => {
       delete dbUsers.branStark.password;
       const id = (await User.findOne(dbUsers.branStark))._id;
       const { name } = user;
 
       return request(app)
-        .patch(`/v1/users/${id}`)
+        .patch(`/users/${id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send({ name })
         .expect(httpStatus.OK)
@@ -431,7 +431,7 @@ describe('Users API', async () => {
       const id = (await User.findOne(dbUsers.branStark))._id;
 
       return request(app)
-        .patch(`/v1/users/${id}`)
+        .patch(`/users/${id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send()
         .expect(httpStatus.OK)
@@ -442,7 +442,7 @@ describe('Users API', async () => {
 
     it('should report error "User does not exist" when user does not exists', () => {
       return request(app)
-        .patch('/v1/users/palmeiras1914')
+        .patch('/users/palmeiras1914')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(httpStatus.NOT_FOUND)
         .then((res) => {
@@ -455,7 +455,7 @@ describe('Users API', async () => {
       const id = (await User.findOne({ email: dbUsers.branStark.email }))._id;
 
       return request(app)
-        .patch(`/v1/users/${id}`)
+        .patch(`/users/${id}`)
         .set('Authorization', `Bearer ${userAccessToken}`)
         .expect(httpStatus.FORBIDDEN)
         .then((res) => {
@@ -469,7 +469,7 @@ describe('Users API', async () => {
       const role = 'admin';
 
       return request(app)
-        .patch(`/v1/users/${id}`)
+        .patch(`/users/${id}`)
         .set('Authorization', `Bearer ${userAccessToken}`)
         .send({ role })
         .expect(httpStatus.OK)
@@ -479,15 +479,15 @@ describe('Users API', async () => {
     });
   });
 
-  describe('DELETE /v1/users', () => {
+  describe('DELETE /users', () => {
     it('should delete user', async () => {
       const id = (await User.findOne({}))._id;
 
       return request(app)
-        .delete(`/v1/users/${id}`)
+        .delete(`/users/${id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(httpStatus.NO_CONTENT)
-        .then(() => request(app).get('/v1/users'))
+        .then(() => request(app).get('//users'))
         .then(async () => {
           const users = await User.find({});
           expect(users).to.have.lengthOf(1);
@@ -496,7 +496,7 @@ describe('Users API', async () => {
 
     it('should report error "User does not exist" when user does not exists', () => {
       return request(app)
-        .delete('/v1/users/palmeiras1914')
+        .delete('/users/palmeiras1914')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(httpStatus.NOT_FOUND)
         .then((res) => {
@@ -509,7 +509,7 @@ describe('Users API', async () => {
       const id = (await User.findOne({ email: dbUsers.branStark.email }))._id;
 
       return request(app)
-        .delete(`/v1/users/${id}`)
+        .delete(`/users/${id}`)
         .set('Authorization', `Bearer ${userAccessToken}`)
         .expect(httpStatus.FORBIDDEN)
         .then((res) => {
@@ -519,12 +519,12 @@ describe('Users API', async () => {
     });
   });
 
-  describe('GET /v1/users/profile', () => {
+  describe('GET /users/profile', () => {
     it('should get the logged user\'s info', () => {
       delete dbUsers.jonSnow.password;
 
       return request(app)
-        .get('/v1/users/profile')
+        .get('/users/profile')
         .set('Authorization', `Bearer ${userAccessToken}`)
         .expect(httpStatus.OK)
         .then((res) => {
@@ -541,7 +541,7 @@ describe('Users API', async () => {
       clock.tick((JWT_EXPIRATION * 60000) + 60000);
 
       return request(app)
-        .get('/v1/users/profile')
+        .get('/users/profile')
         .set('Authorization', `Bearer ${expiredAccessToken}`)
         .expect(httpStatus.UNAUTHORIZED)
         .then((res) => {
