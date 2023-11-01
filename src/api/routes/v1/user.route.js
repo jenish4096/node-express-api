@@ -20,7 +20,7 @@ router.param('userId', controller.load);
 router
   .route('/')
   /**
-   * @api {get} v1/users List Users
+   * @api {get} /users List Users
    * @apiDescription Get a list of users
    * @apiVersion 1.0.0
    * @apiName ListUsers
@@ -42,7 +42,7 @@ router
    */
   .get(authorize(ADMIN), validate(listUsers), controller.list)
   /**
-   * @api {post} v1/users Create User
+   * @api {post} /users Create User
    * @apiDescription Create a new user
    * @apiVersion 1.0.0
    * @apiName CreateUser
@@ -72,7 +72,7 @@ router
 router
   .route('/profile')
   /**
-   * @api {get} v1/users/profile User Profile
+   * @api {get} /users/profile User Profile
    * @apiDescription Get logged in user profile information
    * @apiVersion 1.0.0
    * @apiName UserProfile
@@ -95,7 +95,7 @@ router
 router
   .route('/:userId')
   /**
-   * @api {get} v1/users/:id Get User
+   * @api {get} /users/:id Get User
    * @apiDescription Get user information
    * @apiVersion 1.0.0
    * @apiName GetUser
@@ -116,7 +116,7 @@ router
    */
   .get(authorize(LOGGED_USER), controller.get)
   /**
-   * @api {put} v1/users/:id Replace User
+   * @api {put} /users/:id Replace User
    * @apiDescription Replace the whole user document with a new one
    * @apiVersion 1.0.0
    * @apiName ReplaceUser
@@ -144,7 +144,7 @@ router
    */
   .put(authorize(LOGGED_USER), validate(replaceUser), controller.replace)
   /**
-   * @api {patch} v1/users/:id Update User
+   * @api {patch} /users/:id Update User
    * @apiDescription Update some fields of a user document
    * @apiVersion 1.0.0
    * @apiName UpdateUser
@@ -172,7 +172,7 @@ router
    */
   .patch(authorize(LOGGED_USER), validate(updateUser), controller.update)
   /**
-   * @api {patch} v1/users/:id Delete User
+   * @api {patch} /users/:id Delete User
    * @apiDescription Delete a user
    * @apiVersion 1.0.0
    * @apiName DeleteUser
