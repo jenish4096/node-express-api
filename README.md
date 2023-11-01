@@ -125,3 +125,12 @@ npm run deploy
 or
 sh ./deploy.sh
 ```
+
+
+
+Docker build for Prod Deployment
+
+docker build . -t nodeapp --build-arg PORT=3001 --build-arg JWT_SECRET=<valuehere> --build-arg JWT_EXPIRATION_MINUTES=60 --build-arg MONGO_URI=<valuehere>
+
+
+docker run -d -p 3001:3001 --name prodapp nodetestapp
